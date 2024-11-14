@@ -59,6 +59,11 @@
             <a href="<?= site_url('download-user-data-word'); ?>" class="btn btn-secondary">
                 Download User Data in Word
             </a>
+
+			<!-- Image Download Button -->
+			<a href="<?= site_url('download-user-data-image'); ?>" class="btn btn-success">
+				Download User Data in Image
+			</a>
         </div>
     </div>
 

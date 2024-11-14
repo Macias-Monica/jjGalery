@@ -16,3 +16,4 @@ $routes->get('/auth/logout', 'Auth::logout');
 $routes->get('/dashboard', 'Dashboard::index');
 $routes->get('download-user-data', 'PdfController::downloadUserData');
 $routes->get('download-user-data-word', 'WordExportController::downloadUserDataWord');
+$routes->get('download-user-data-image', 'ImageExportController::downloadUserDataImage');
