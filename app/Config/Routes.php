@@ -14,3 +14,5 @@ $routes->post('/auth/loginUser', 'Auth::loginUser');
 $routes->get('/auth/logout', 'Auth::logout');
 
 $routes->get('/dashboard', 'Dashboard::index');
+$routes->get('download-user-data', 'PdfController::downloadUserData');
+
