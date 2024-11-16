@@ -30,6 +30,34 @@
         .logout-link:hover {
             text-decoration: underline;
         }
+
+        /* Gallery Section */
+        .gallery-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .gallery-item {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .gallery-item p {
+            text-align: center;
+            font-size: 12px;
+        }
+
+        /* Footer Section */
+        footer {
+            margin-top: 50px;
+        }
     </style>
 </head>
 <body>
@@ -37,7 +65,7 @@
     <!-- Header Section -->
     <header class="container">
         <div class="d-flex justify-content-between align-items-center">
-            <h2>Welcome, User</h2>
+            <h2>Welcome, <?= session()->get('username'); ?></h2>
             <a href="/auth/logout" class="logout-link">Logout</a>
         </div>
         <p>This is the user dashboard, where you can manage your information and download data.</p>
@@ -60,10 +88,35 @@
                 Download User Data in Word
             </a>
 
-			<!-- Image Download Button -->
-			<a href="<?= site_url('download-user-data-image'); ?>" class="btn btn-success">
-				Download User Data in Image
-			</a>
+            <!-- Image Download Button -->
+            <a href="<?= site_url('download-user-data-image'); ?>" class="btn btn-success">
+                Download User Data in Image
+            </a>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="mt-5">
+            <h3>Your Image Gallery</h3>
+            <p>Here you can view, edit, or delete your uploaded images.</p>
+
+            <!-- Link to go to the Image Gallery page -->
+            <a href="<?= site_url('/gallery'); ?>" class="btn btn-info mb-3">
+                Go to Gallery
+            </a>
+
+            <!-- Image Previews (Optional: you can fetch these dynamically from the DB) -->
+            <div class="gallery-preview">
+                <?php if (!empty($images)): ?>
+                    <?php foreach ($images as $image): ?>
+                        <div class="gallery-item">
+                            <img src="<?= base_url('uploads/' . $image['filename']); ?>" alt="Image Preview">
+                            <p><?= $image['name']; ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No images uploaded yet.</p>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 
