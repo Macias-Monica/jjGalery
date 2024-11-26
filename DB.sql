@@ -17,3 +17,4 @@ CREATE TABLE `images` (
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- Fecha de la última actualización
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)  -- Relaciona la imagen con el usuario
 );
+
