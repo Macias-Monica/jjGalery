@@ -24,14 +24,9 @@ $routes->get('/gallery', 'Gallery::index');
 
 // Ruta para subir una nueva imagen
 $routes->post('/gallery/uploadImage', 'Gallery::uploadImage');
+//ruta para eliminar la imagen
+$routes->get('gallery/delete/(:num)', 'Gallery::delete/$1');
 
+$routes->get('gallery/edit/(:num)', 'Gallery::edit/$1'); // Ruta para abrir el modal de edición
+$routes->post('gallery/update/(:num)', 'Gallery::update/$1'); // Ruta para actualizar la imagen
 
-
-// Ruta para subir una nueva imagen
-//$routes->match(['get', 'post'], '/gallery/upload', 'GalleryController::upload');
-
-// Ruta para eliminar una imagen
-//$routes->get('/gallery/delete/(:num)', 'GalleryController::delete/$1');
-
-// Ruta para editar una imagen
-//$routes->match(['get', 'post'], '/gallery/edit/(:num)', 'GalleryController::edit/$1');

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+
 use CodeIgniter\Controller;
 use CodeIgniter\Encryption\Encryption;
 
@@ -19,13 +20,13 @@ class Auth extends Controller
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
         $confirmPassword = $this->request->getPost('confirm_password');
-        
+
         if ($password !== $confirmPassword) {
             return redirect()->to('/auth/register')->with('error', 'Passwords do not match');
         }
 
         $userModel = new UserModel();
-        
+
         // Check if the username or email already exists
         if ($userModel->getUserByUsername($username)) {
             return redirect()->to('/auth/register')->with('error', 'Username already taken');
@@ -43,7 +44,7 @@ class Auth extends Controller
 
         if ($userModel->createUser($data)) {
             //return redirect()->to('/auth/login')->with('success', 'Account created successfully');
-			return redirect()->to('/')->with('success', 'Account created successfully');
+            return redirect()->to('/')->with('success', 'Account created successfully');
         }
 
         return redirect()->to('/auth/register')->with('error', 'Registration failed');
@@ -58,13 +59,13 @@ class Auth extends Controller
     {
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
-        
+
         $userModel = new UserModel();
         $user = $userModel->getUserByUsername($username);
 
         if (!$user || !password_verify($password, $user['password'])) {
             //return redirect()->to('/auth/login')->with('error', 'Invalid username or password');
-			return redirect()->to('/')->with('error', 'Invalid username or password');
+            return redirect()->to('/')->with('error', 'Invalid username or password');
         }
 
         // Store user info in session
@@ -73,14 +74,16 @@ class Auth extends Controller
             'username' => $user['username'],
             'role' => $user['role']
         ]);
-
+    
         return redirect()->to('/dashboard');
     }
+
+
 
     public function logout()
     {
         session()->destroy();
         //return redirect()->to('/auth/login');
-		return redirect()->to('/');
+        return redirect()->to('/');
     }
 }

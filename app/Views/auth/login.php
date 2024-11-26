@@ -87,7 +87,6 @@
 
     <div class="container">
         <h2>Login</h2>
-
         <?php if (session()->getFlashdata('error')): ?>
             <div class="error-message">
                 <?= session()->getFlashdata('error') ?>

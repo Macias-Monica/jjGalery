@@ -15,7 +15,6 @@ class UserModel extends Model
     {
         return $this->where('username', $username)->first();
     }
-
     public function createUser($data)
     {
         return $this->insert($data);

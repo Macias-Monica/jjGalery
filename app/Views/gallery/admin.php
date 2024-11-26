@@ -11,34 +11,37 @@
 
 <body>
     <h1>Galería</h1>
-    <a href="<?= site_url('gallery/upload') ?> " class="btn btn-info mb-3">Subir Imagen</a>
-    <?php if (!empty($images)): ?>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Imagen</th>
-                    <th>Descripción</th>
-                    <th>Fecha de Creación</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>               
-                    <?php foreach ($images as $image): ?>
-                        <tr>
-                            <td>
-                                <img src="<?= base_url('uploads/' . $image['filename']); ?>"  width="100">
-                            </td>
-                            <td><?= esc($image['description']); ?></td>
-                            <td><?= esc($image['created_at']); ?></td>
-                        </tr>
-                    <?php endforeach; ?>           
-            </tbody>
-        </table>
+    <div class="gallery-preview">
+            <?php if (!empty($images)): ?>
+                <?php foreach ($images as $image): ?>
+                    <div class="gallery-item">
+                        <!-- Imagen -->
+                        <div class="image-container">
+                            <img src="<?= base_url('uploads/' . $image['filename']); ?>" class="custom-image">
+                        </div>
 
-    <?php else: ?>
-        <p>No hay imágenes para mostrar.</p>
-    <?php endif; ?>
+                        <!-- Descripción -->
+                        <div class="image-description">
+                            <p><?= $image['description']; ?></p>
+                        </div>
 
+                        <!-- Acciones de Editar y Eliminar -->
+                        <div class="image-actions">
+                            <!-- Botón para abrir el modal de editar -->
+                            <a href="<?= site_url('gallery/edit/' . $image['id']); ?>" class="btn btn-warning btn-sm">
+                                </i> Edit
+                            </a>
+
+                            <a href="<?= site_url('gallery/delete/' . $image['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this image?');">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="container text-center mt-5">No images uploaded yet.</p>
+            <?php endif; ?>
+        </div>
 
 </body>
 <!-- Footer Section -->
