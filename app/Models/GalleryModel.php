@@ -8,14 +8,17 @@ class GalleryModel extends Model
 {
     protected $table = 'images';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['user_id','filename', 'description','create_at','update_at'];
+    protected $allowedFields = ['user_id','user_name','filename', 'description','create_at','update_at'];
 
    // Método para obtener imágenes basadas en el rol
    public function getImages($role,$userId)
    {
        if ($role === 'admin') {
            // Para el admin, puedes obtener todas las imágenes
-           return $this->findAll();
+           //return $this->findAll();
+           return $this->select('user_id, user_name, id, filename, description')
+           ->orderBy('user_name')
+           ->findAll();
        } elseif ($role === 'user') {
            // Para el usuario, puedes filtrar las imágenes (ejemplo: solo las que son visibles)
            return $this->where('user_id', $userId)->findAll(); 

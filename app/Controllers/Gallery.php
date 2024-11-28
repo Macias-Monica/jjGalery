@@ -25,7 +25,7 @@ class Gallery extends Controller
         $images = $galleryModel->getImages($role, $userId);
         if ($role == 'admin') {
             // return view('gallery/admin', ['images' => $images]); // Cargar la vista de admin
-            return view('gallery/admin', ['images' => $images]); // Cargar la vista de admin
+            return view('dashboard/admin', ['images' => $images]); // Cargar la vista de admin
         } elseif ($role == 'user') {
             // return view('gallery/user', ['images' => $images]); // Cargar la vista de usuario
             return view('dashboard/user', ['images' => $images]);
@@ -51,6 +51,7 @@ class Gallery extends Controller
 
             // Obtener el id del usuario desde la sesión
             $user_id = session()->get('id');
+            $user_name = session()->get('username');
 
             // Guardar la información de la imagen en la base de datos
             $model = new GalleryModel();
@@ -58,6 +59,7 @@ class Gallery extends Controller
                 'user_id' => $user_id,
                 'filename' => $newName,
                 'description' => $description,
+                'user_name' => $user_name,
             ]);
 
             //redirecciona al dashboard principal
@@ -65,41 +67,29 @@ class Gallery extends Controller
         }
     }
     // Método para actualizar la imagen
-    public function update()
+    public function update($imageId)
     {
-        // Obtener datos del formulario
-        $imageId = $this->request->getPost('image_id');
-        $description = $this->request->getPost('description');
-        $file = $this->request->getFile('image');
-
-        // Cargar el modelo
         $model = new GalleryModel();
-
-        // Verificar si la imagen existe
-        $image = $model->find($imageId);
-        if (!$image) {
-            return redirect()->to('/gallery')->with('error', 'Imagen no encontrada');
+    
+        // Validar datos
+        $rules = [
+            'description' => 'required|min_length[3]|max_length[255]',
+        ];
+    
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Descripción no válida.');
         }
-
-        // Procesar nueva imagen si se cargó
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $newName = $file->getRandomName();
-            $file->move(FCPATH . 'uploads', $newName);
-
-            // Actualizar imagen y descripción
-            $model->update($imageId, [
-                'filename' => $newName,
-                'description' => $description,
-            ]);
-        } else {
-            // Solo actualizar descripción
-            $model->update($imageId, [
-                'description' => $description,
-            ]);
-        }
-
-        return redirect()->to('/gallery')->with('success', 'Imagen actualizada correctamente');
+    
+        // Obtener los datos del formulario
+        $description = $this->request->getPost('description');
+    
+        // Actualizar la imagen
+        $model->update($imageId, ['description' => $description]);
+    
+        // Redirigir después de la actualización
+        return redirect()->to('/dashboard')->with('success', 'Imagen actualizada correctamente.');
     }
+    
     public function delete($id)
     {
         // Lógica para eliminar la imagen
@@ -122,9 +112,14 @@ class Gallery extends Controller
         if (!$image) {
             return redirect()->to('/dashboard')->with('error', 'Imagen no encontrada.');
         }
+        $role = session()->get('role');
+        if ($role === 'admin') {
+            return view('dashboard/admin', ['images' => $this->getUserImages(), 'editImage' => $image]);
 
-        // Pasar la información al dashboard
-        return view('dashboard/user', ['images' => $this->getUserImages(), 'editImage' => $image]);
+        } else {
+            // Pasar la información al dashboard
+            return view('dashboard/user', ['images' => $this->getUserImages(), 'editImage' => $image]);
+        }
     }
 
     // Método auxiliar para obtener las imágenes del usuario

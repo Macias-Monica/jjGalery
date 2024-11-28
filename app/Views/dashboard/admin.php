@@ -92,6 +92,12 @@
             color: #555;
         }
 
+        .image-userName {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
         /* Contenedor para los botones de acción (editar y borrar) */
         .image-actions {
             margin-top: 10px;
@@ -132,72 +138,58 @@
     </header>
 
     <div class="container text-center mt-5">
-        <h3>Gallery</h3>
 
+    <h3>Admin Dashboard</h3>
 
-        <!-- Image Previews -->
-        <div class="gallery-preview">
-            <?php if (!empty($images)): ?>
-                <?php foreach ($images as $image): ?>
-                    <div class="gallery-item">
-                        <!-- Imagen -->
-                        <div class="image-container">
-                            <img src="<?= base_url('uploads/' . $image['filename']); ?>" class="custom-image">
-                        </div>
-
-                        <!-- Descripción -->
-                        <div class="image-description">
-                            <p><?= $image['description']; ?></p>
-                        </div>
-
-                        <!-- Acciones de Editar y Eliminar -->
-                        <div class="image-actions">
-                            <!-- Botón para abrir el modal de editar -->
-                            <a href="<?= site_url('gallery/edit/' . $image['id']); ?>" class="btn btn-warning btn-sm">
-                                </i> Edit
-                            </a>
-
-                            <a href="<?= site_url('gallery/delete/' . $image['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this image?');">
-                                <i class="fas fa-trash"></i> Delete
-                            </a>
-                        </div>
+    <!-- Tabla colapsable -->
+    <div class="accordion" id="userImagesAccordion">
+        <?php if (!empty($images)): ?>
+            <?php 
+            // Agrupar imágenes por usuario
+            $groupedImages = [];
+            foreach ($images as $image) {
+                $groupedImages[$image['user_name']][] = $image;
+            }
+            ?>
+            <?php foreach ($groupedImages as $userName => $userImages): ?>
+                <div class="card">
+                    <div class="card-header" id="heading-<?= esc($userName); ?>">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-<?= esc($userName); ?>" aria-expanded="false" aria-controls="collapse-<?= esc($userName); ?>">
+                                <?= esc($userName); ?> Gallery
+                            </button>
+                        </h5>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p class="container text-center mt-5">No images uploaded yet.</p>
-            <?php endif; ?>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="uploadModalLabel">Subir Imagen</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" enctype="multipart/form-data" action="/gallery/uploadImage">
-                            <div class="form-group">
-                                <label for="image">Seleccionar Imagen</label>
-                                <input type="file" name="image" id="image" accept="image/*" class="form-control" required>
+                    <div id="collapse-<?= esc($userName); ?>" class="collapse" aria-labelledby="heading-<?= esc($userName); ?>" data-parent="#userImagesAccordion">
+                        <div class="card-body">
+                            <div class="gallery-preview">
+                                <?php foreach ($userImages as $image): ?>
+                                    <div class="gallery-item">
+                                        <!-- Imagen -->
+                                        <div class="image-container">
+                                            <img src="<?= base_url('uploads/' . $image['filename']); ?>" class="custom-image">
+                                        </div>
+                                        <!-- Descripción -->
+                                        <div class="image-description">
+                                            <p><?= esc($image['description']); ?></p>
+                                        </div>
+                                        <!-- Acciones -->
+                                        <div class="image-actions">
+                                            <a href="<?= site_url('gallery/edit/' . $image['id']); ?>" class="btn btn-warning btn-sm">Editar</a>
+                                            <a href="<?= site_url('gallery/delete/' . $image['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta imagen?');">Eliminar</a>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
-
-                            <div class="form-group mt-3">
-                                <label for="description">Descripción de la Imagen</label>
-                                <input type="text" name="description" id="description" class="form-control">
-                            </div>
-
-                            <div class="mt-3">
-                                <button type="submit" class="btn btn-primary">Subir Imagen</button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No hay imágenes disponibles.</p>
+        <?php endif; ?>
+    </div>
+</div>
 
         <!-- Modal de Editar Imagen -->
         <?php if (!empty($editImage)): ?>

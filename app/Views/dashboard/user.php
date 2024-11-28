@@ -213,17 +213,22 @@
                             <a href="<?= site_url('dashboard') ?>" class="close" aria-label="Close">&times;</a>
                         </div>
                         <form action="<?= site_url('gallery/update/' . $editImage['id']); ?>" method="post">
+                            <!-- CSRF Token -->
+                            <?= csrf_field(); ?>
+
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="description">Descripción</label>
                                     <input type="text" name="description" id="description" class="form-control" value="<?= esc($editImage['description']); ?>">
                                 </div>
                             </div>
+
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                                 <a href="<?= site_url('dashboard') ?>" class="btn btn-secondary">Cancelar</a>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>

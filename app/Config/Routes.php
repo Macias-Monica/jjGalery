@@ -27,6 +27,6 @@ $routes->post('/gallery/uploadImage', 'Gallery::uploadImage');
 //ruta para eliminar la imagen
 $routes->get('gallery/delete/(:num)', 'Gallery::delete/$1');
 
-$routes->get('gallery/edit/(:num)', 'Gallery::edit/$1'); // Ruta para abrir el modal de edición
-$routes->post('gallery/update/(:num)', 'Gallery::update/$1'); // Ruta para actualizar la imagen
+$routes->GET('gallery/edit/(:num)', 'Gallery::edit/$1'); // Ruta para abrir el modal de edición
+$routes->post('gallery/update/(:num)', 'Gallery::update/$1');
 

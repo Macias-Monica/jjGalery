@@ -11,6 +11,7 @@ CREATE TABLE `users` (
 CREATE TABLE `images` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `user_id` INT NOT NULL,  -- Relaciona la imagen con el usuario que la subió
+  `user_name` varchar(25) NOT NULL,  -- Relaciona la imagen con el usuario que la subió
   `filename` VARCHAR(255) NOT NULL,  -- Nombre del archivo de la imagen
   `description` TEXT,  -- Descripción de la imagen
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Fecha de subida
